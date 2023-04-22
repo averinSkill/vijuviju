@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ipkon's map</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+
+    <link href="./style.css" rel="stylesheet">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css' rel='stylesheet' />
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js'></script>
+    <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+
+
+
+</head>
+
+<body>
+    <div id='map' style='width: 1400px; height: 1300px;'></div>
+    <!--    <button id="zoomto" class="btn-control">Zoom to bounds</button>-->
+
+    <div class="map-overlay">
+        <div id="feature-listing" class="listing">
+            <!--            <p></p>-->
+        </div>
+
+        <div id="decompose-map" class="info">
+            <ul class="info-listing">
+                <li><img src="./sensor.png"><span>Сенсор для снятия показаний</span></li>
+                <li><img src="./pattern-yellow.png"><span>Площадь взрываемого горного массива</span></li>
+                <li><img src="./gradient.png"></li>
+                <li><span>Диапозон изменения величины отображаемой изолиниями</span></li>
+
+            </ul>
+        </div>
+    </div>
+
+
+
+    <script>        
+        // Isolians parameters, at default sharpness is 0.85, and resolution 10 000
+
+        let SHARPNESS = 0.5
+        let RESOLUTION = 5000
+
+        moment.locale('ru')
+
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiaG9va2FobG9jYXRvciIsImEiOiI5WnJEQTBBIn0.DrAlI7fhFaYr2RcrWWocgw';
+
+        const bounds = [
+            [
+                9.871121177335397,
+                3.1604821038190067
+            ],
+            [
+                54.71246842769622,
+                33.68387384390269
+            ]
+        ]
+
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+            style: "mapbox://styles/hookahlocator/clg82vae6008501mpb46y0kwc",
+            zoom: 11,
+            center: [
+                86.07591567150264,
+                55.56604457193041
+            ],
+            //            pitch: 76,
+            //            bearing: -177.2,
+            projection: 'mercator'
+            //            maxBounds: bounds
+        });
+
+        const popupBlock = new mapboxgl.Popup({
+            closeOnClick: true,
+            className: 'mapboxgl-popup_block'
+        })
+
+        const popupSensor = new mapboxgl.Popup({
+            closeOnClick: true,
+            className: 'mapboxgl-popup_sensor'
+        })
+
+
+        let isolines = []
+        let sensors = []
+        let blocks = []
+
+        //        let urls = [{
+        //            "name": "isolines",
+        //            "url": 'localhost8000/api/isolines'
+        //        }, {
+        //            "name": "sensors",
+        //            "url": 'localhost8000/api/sensors'
+        //        }, {
+        //            "name": "blocks",
+        //            "url": 'localhost8000/api/seismoeventsparams'
+        //        }, {
+        //            "name": "seismoevents",
+        //            "url": 'localhost8000/api/seismoevents'
+        //        }]
+
+        let urls = [{
+            "name": "isolines",
+            "url": './isolines.json'
+        }, {
+            "name": "sensors",
+            "url": './sensors.json'
+        }, {
+            "name": "blocks",
+            "url": './seismoeventparams.json'
+        }, {
+            "name": "seismoevents",
+            "url": './seismoevents.json'
+        }]
+
+        let fetchedData = []
+
+        let ides = []
+
+        //        let respo
+
+        const requests = urls.map(url => fetch(url.url))
+
+        Promise.all(requests).then(responses =>
+            Promise.all(responses.map(response =>
+                response.json()
+            ))
+        ).then((data) => {
+            console.log(data)
+            console.log('hey')
+            console.log(fetchedData)
+
+
+            data[2].seismoeventparams.forEach((el) => {
+
+                ides.push(el.seismoevent)
+
+                let coordinates = el.block_contuor.map(coordinates => coordinates.reverse())
+                //                coordinates.push(el.block_contuor[0].reverse())
+                const seismoevent = data[3].seismoevents.find(event => event.id == el.seismoevent)
+
+                blocks.push({
+                    "type": "Feature",
+                    "properties": {
+                        "id": el.seismoevent,
+                        "name": el.name,
+                        "created": moment(seismoevent.created, 'YYYY-MM-DDTHH:mm:ss.SSSS'),
+                        "time_actual": seismoevent.time_actual,
+                        "time_scheduled": seismoevent.time_scheduled,
+                        "info": {
+                            "volume_blasted_rock_mass": {
+                                "name": "Объем взрываемого горного массива",
+                                "value": el.volume_blasted_rock_mass,
+                                "type": "м3"
+                            },
+
+                            "specific_consumption_explosives": {
+                                "name": "Удельный расход ВВ общий",
+                                "value": el.specific_consumption_explosives,
+                                "type": "кг/м3"
+                            },
+
+                            "deceleration_interval": {
+                                "name": "Интервал замедлений",
+                                "value": el.deceleration_interval,
+                                "type": "кг/м3"
+                            },
+                            "wells_diameter": {
+                                "name": "Диаметр скважин",
+                                "value": el.wells_diameter,
+                                "type": "мм"
+                            },
+                            "wells_grid": {
+                                "name": "Сетка скважин",
+                                "value": el.wells_grid,
+                                "type": "м"
+                            },
+                            "water_height": {
+                                "name": "Высота столба воды",
+                                "value": el.water_height,
+                                "type": "м"
+                            },
+                            "explosive_type": {
+                                "name": "Тип ВВ",
+                                "value": el.explosive_type,
+                                "type": ""
+                            },
+
+                            "wells_count": {
+                                "name": "Количество скважин",
+                                "value": el.wells_count,
+                                "type": "шт"
+                            },
+                            "total_mass_explosives_block": {
+                                "name": "Общая масса ВВ на блоке",
+                                "value": el.total_mass_explisoves_block,
+                                "type": "кг"
+                            },
+
+                            "max_mass_in_well": {
+                                "name": "Максимальная масса ВВ в скважине",
+                                "value": el.total_mass_explisoves_block,
+                                "type": "кг"
+                            },
+                            "blasting_method": {
+                                "name": "Способ инициирования",
+                                "value": el.blasting_method,
+                                "type": ''
+                            },
+                            "rocks_type": {
+                                "name": "Горная порода",
+                                "value": el.rocks_type,
+                                "type": ""
+                            },
+                            "rock_hardness": {
+                                name: "коэффициент крепости пород по шкале проф. М.М. Протодьяконова",
+                                "value": el.rock_hardness,
+                                "type": ""
+                            },
+                            "distance2protected_object": {
+                                "value": el.distance2protected_object,
+                                "name": "Расстояние до охраняемого объекта",
+                                "type": "м"
+                            },
+                            "zaboika": {
+                                "value": el.zaboika,
+                                "name": "Тип забойки",
+                                "type": ""
+                            }
+                        }
+
+                        //                            "explosive_type": el.explosive_type
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [coordinates]
+                    }
+                })
+            })
+
+            data[1].sensors.forEach((el, index) => {
+                sensors.push({
+                    "type": "Feature",
+                    "properties": {
+                        "id": el.id,
+                        "name": el.name,
+                        "status": el.status,
+                        "type": el.type,
+                        "alt": el.alt,
+                        "level StaLta": el.params.level_stalta
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [el.lat, el.lon]
+                    }
+                })
+            })
+
+            //            fetchedData.map(data => data.data.then(data => console.log(data)))
+            //        })
+
+
+
+
+
+            //                    fetch('isolines_new.json')
+            //                        .then((response) => {
+            //                            return response.json();
+            //                        })
+            //                        .then((data) => {
+            //                            console.log(data)
+            data[0].isolines.forEach((el, index) => {
+                Object.keys(el.data).forEach(key => {
+                    //                        console.log(key)
+
+                    const line = turf.lineString(el.data[key].map(coordinates => coordinates.reverse()))
+
+                    const curvedLine = turf.bezierSpline(line, {
+                        "sharpness": SHARPNESS,
+                        "resolution": RESOLUTION
+                    })
+
+                    isolines.push({
+                        "type": "Feature",
+                        "properties": {
+                            "power": +key,
+                            "id": el.seismoevent
+                        },
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": curvedLine.geometry.coordinates
+                        }
+                    })
+                })
+            })
+
+            let featuresOfIsolines = {
+                "type": "FeatureCollection",
+                "features": isolines
+            }
+
+            let featuresOfPoints = {
+                "type": "FeatureCollection",
+                "features": sensors
+            }
+
+            let featuresOfBlocks = {
+                "type": "FeatureCollection",
+                "features": blocks
+            }
+
+            console.log('hey')
+            console.log(featuresOfIsolines)
+            console.log(featuresOfPoints)
+            console.log(featuresOfBlocks)
+
+
+            //            const epicent = turf.polygon([
+            //                [
+            //                    [
+            //                        31.373985216265538,
+            //                        20.720896730190887
+            //                    ],
+            //                    [
+            //                        31.373985216265538,
+            //                        19.87615772411121
+            //                    ],
+            //                    [
+            //                        33.22936171841803,
+            //                        19.87615772411121
+            //                    ],
+            //                    [
+            //                        33.22936171841803,
+            //                        20.720896730190887
+            //                    ],
+            //                    [
+            //                        31.373985216265538,
+            //                        20.720896730190887
+            //                    ]
+            //                ]
+            //            ])
+
+            //            console.log(epicent)
+
+            const toggleableIsolainsId = [...new Set(ides)]
+            console.log(toggleableIsolainsId)
+
+
+            //                console.log(featuresOfIsolines)
+
+            map.on('style.load', () => {
+
+                //                    map.setFog({})
+                //
+                //
+                //                    map.addSource('mapbox-dem', {
+                //                        'type': 'raster-dem',
+                //                        'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+                //                        'tileSize': 512,
+                //                        'maxzoom': 14
+                //                    })
+                //
+                //                    map.setTerrain({
+                //                        'source': 'mapbox-dem',
+                //                        'exaggeration': 1.5
+                //                    });
+
+            })
+
+            map.on("load", () => {
+
+
+
+
+                map.addSource('example', {
+                    "type": "geojson",
+                    "data": featuresOfIsolines
+                })
+
+                map.addSource('example-points-data', {
+                    "type": "geojson",
+                    "data": featuresOfPoints,
+                    cluster: true,
+                    clusterMaxZoom: 14,
+                    clusterRadius: 8,
+                    clusterMinPoints: 2
+                })
+
+                map.addSource('blocks-data', {
+                    "type": "geojson",
+                    "data": featuresOfBlocks
+                })
+
+                map.addLayer({
+                    'id': 'example-points-data-circles',
+                    'type': 'circle',
+                    'source': 'example-points-data',
+                    'layout': {
+
+                    },
+                    'paint': {
+                        'circle-radius': 10,
+                        'circle-color': 'rgba(35,148,119,1)',
+                    }
+                })
+
+
+                map.addLayer({
+                    'id': 'example-points-data-circles-clusters',
+                    'type': 'circle',
+                    'source': 'example-points-data',
+                    filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': 'rgba(35,148,119,1)',
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            11,
+                            2,
+                            12,
+                            3,
+                            13
+                        ]
+                    }
+                })
+
+                map.addLayer({
+                    'id': 'example-points-data-circles-clusters-label',
+                    type: 'symbol',
+                    'source': 'example-points-data',
+                    filter: ['has', 'point_count'],
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-size': 12,
+                        'text-font': ['Montserrat Regular'],
+                        // 'placement': "bottom-start"
+                    },
+                    paint: {
+                        'text-color': '#ffffff',
+                    }
+                })
+
+                //                const 
+                map.loadImage('./sensor.png', (err, image) => {
+                    if (err) throw err;
+
+                    map.addImage('sensor', image);
+
+                    map.addLayer({
+                        'id': 'example-points-data-icons',
+                        "type": 'symbol',
+                        "source": 'example-points-data',
+                        //                        "filter": [ "!=" , ['has', 'point_count'] ],
+                        'layout': {
+                            "icon-image": "sensor",
+                            "icon-size": 0.1
+                        }
+                    })
+                })
+
+                map.loadImage('./pattern-yellow.png', (err, image) => {
+                    if (err) throw err;
+
+                    map.addImage('pattern', image);
+
+                    map.addLayer({
+                        'id': 'example-epicentr-fill',
+                        'type': 'fill',
+                        'source': 'blocks-data',
+                        'paint': {
+                            'fill-pattern': 'pattern',
+
+                            //                            'fill-color': 'rgb(244, 238, 119)', // blue color fill
+                            'fill-opacity': 0.5,
+                            //                        'fill-stroke-color': '#000000',
+                            //                        'fill-stroke-width': 4
+                            //                        'fill-blur': '10px',
+                            //                            'fill-outline-color': '#0080ff'
+                        }
+                    })
+
+
+                })
+
+
+
+                map.addLayer({
+                    'id': 'example-epicentr-line',
+                    'type': 'line',
+                    'source': "blocks-data",
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': "#EEE63E",
+                        'line-width': 2,
+                        'line-opacity': 1,
+                        //                        'line-offset': -5,
+
+                        //                        'line-blur': 5
+                    }
+                })
+
+                //                map.addLayer({
+                //                    'id': 'example-epicentr-line-2',
+                //                    'type': 'line',
+                //                    'source': "blocks-data",
+                //                    'layout': {
+                //                        'line-join': 'round',
+                //                        'line-cap': 'round'
+                //                    },
+                //                    'paint': {
+                //                        'line-color': "#FFFFFF",
+                //                        'line-width': 3,
+                //                        'line-opacity': 1,
+                //                        'line-offset': -10,
+                //
+                //                        'line-blur': 5
+                //                    }
+                //                })
+
+                map.addLayer({
+
+                        'id': 'example-lines',
+                        'type': 'line',
+                        'source': 'example',
+                        //                    'source-layer': 'ipkon-ts',
+                        'layout': {
+                            'line-join': 'round',
+                            'line-cap': 'round'
+                        },
+                        'paint': {
+                            'line-color': [
+                                'interpolate',
+                                ['linear'],
+                                ['get', 'power'],
+                                0,
+                                'rgb(220, 232, 244)',
+                                //                                20,
+                                //                                
+                                //                                40,
+                                //                            'rgb(189,138,98)',
+                                //                                60,
+                                //                            'rgb(239,138,98)',
+                                //                                80,
+                                //                                'rgb(178,54,43)',
+                                100,
+                                'rgb(252, 83, 83)',
+                            ],
+                            'line-width': 2
+                        }
+                    }
+                    //                        'road-label-simple' // Add layer below labels
+                );
+
+
+                map.addLayer({
+                    id: 'example-label',
+                    type: 'symbol',
+                    source: 'example',
+                    //                        filter: ['has', 'point_count'],
+                    layout: {
+                        'text-field': '{power}',
+                        'text-size': 12,
+                        'text-font': ['Montserrat Regular'],
+                        "symbol-placement": "line-center"
+
+                        //                            'text-offset': [10, 0.5]
+                        //                             'placement': "center"
+                        //                            'text-offset': [
+                        //                                'step',
+                        //                                ['get', 'point_count'],
+                        //                                ['literal', [1, 0.75]],
+                        //                                5,
+                        //                                ['literal', [1.25, 1]],
+                        //                                10,
+                        //                                ['literal', [1.5, 1.25]]
+                        //                            ],
+                    },
+                    paint: {
+                        'text-color': [
+                            'interpolate',
+                            ['linear'],
+                            ['get', 'power'],
+                            0,
+                            '#FFFFFF',
+                            //                            1,
+                            //                            'rgb(239,138,98)',
+                            //                            33,
+                            //                            'rgb(253,219,199)',
+                            //                            66,
+                            //                            'rgb(209,229,240)',
+                            100,
+                            '#FFFFFF',
+                        ],
+                    }
+                })
+
+                const listContainer = document.getElementById('feature-listing')
+
+                for (const id of toggleableIsolainsId) {
+                    const explosion = document.createElement('div')
+
+                    explosion.classList.add('explosion')
+
+                    const expData = blocks.find(el => el.properties.id == id)
+
+                    //                    console.log(expData.properties.info)
+
+                    let date = expData.properties.created
+                    date.locale('ru')
+
+                    const textExplosion = `<div class="explosion_label">
+                    ${expData.properties.name} </br><span> Дата:  ${date.format('DD MMM YYYY HH:MM:SS.SS')} </span> </div>`
+
+
+
+                    //                    console.log(infoExplosion)
+
+                    explosion.innerHTML = textExplosion
+
+
+                    explosion.onclick = function(e) {
+
+                        // toogle hover
+
+                        const explosions = document.querySelectorAll(".explosion")
+
+                        //                        const explosionsInfo = document.querySelectorAll("ul.explosion_info")
+
+                        console.log(explosions)
+
+                        Array.from(explosions).map(exp => exp.classList.remove('explosion-active'))
+
+                        //                        Array.from(explosionsInfo).map(expInfo => expInfo.classList.revome('explosion_info_visible'))
+
+                        explosion.classList.add('explosion-active')
+
+                        //                        explosion.lastChild.classList.add('explosion_info_visible')
+
+                        // filter
+
+                        map.setFilter('example-lines', ['==', ['get', 'id'], id])
+                        map.setFilter('example-label', ['==', ['get', 'id'], id])
+
+                        map.setFilter("example-epicentr-fill", ['==', ['get', 'id'], id])
+                        map.setFilter("example-epicentr-line", ['==', ['get', 'id'], id])
+
+
+                        console.log('op')
+
+                        //                        const coordinatesId = featuresOfIsolines.features.filter(line => line.properties.id == id).sort((a, b) =>
+                        //                            a.properties.power - b.properties.power
+                        //                        )[0].geometry.coordinates
+
+                        //                        console.log(featuresOfIsolines)
+                        //                        console.log(id)
+                        //
+                        //
+                        //
+                        //                        console.log(isoliansId)
+
+                        //                            [0].geometry.coordinates
+
+                        //                        console.log('foo')
+
+                        //                        console.log(coordinatesId)
+
+
+
+                        //                            console.log(coordinates)
+
+                        //                            const bounds = new mapboxgl.LngLatBounds(coordinatesId[0], coordinatesId[0]);
+
+                        //                            for (const coord of coordinatesId) {
+                        //                                bounds.extend(coord)
+                        //                                console.log('ee')
+                        //                            }
+
+                        const isoliansId = featuresOfIsolines.features.filter(line => line.properties.id == id)
+
+                        if (isoliansId.length) {
+                            let bboxIsolians = turf.bbox({
+                                features: isoliansId,
+                                type: "FeatureCollection"
+                            })
+
+                            map.fitBounds(bboxIsolians, {
+                                padding: 20
+                            });
+                        }
+
+
+
+
+                        //                        console.log(centerOfIsolians)
+                        //                        console.log(centerOfIsolians.geometry.coordinates[0])
+                        //                        console.log(centerOfIsolians.geometry.coordinates[1])
+
+                        //                        let centerOfIsolians = turf.center({
+                        //                            features: isoliansId,
+                        //                            type: "FeatureCollection"
+                        //                        })
+
+                        //                        let sv = new mapboxgl.LngLat(centerOfIsolians.geometry.coordinates)
+                        //                        let ne = new mapboxgl.LngLat(centerOfIsolians.geometry.coordinates)
+
+                        //                        console.log(sv, ne)
+
+                        //                        const bounds = new mapboxgl.LngLatBounds(sv, ne);
+
+                        console.log('vchuuux')
+                        //                        console.log(bounds)
+                        //                        console.log(coordinatesId)
+
+                        //                        for (const coord of coordinatesId) {
+                        //                            bounds.extend(coord)
+                        //                        }
+
+                        //                        let zoomBounds = turf.bbox(coordinatesId)
+                        //                            let zoomBounds = turf.bbox({
+                        //                                "type": "FeatureCollection",
+                        //                                features: featuresId})
+
+                        //                        let boundsOfLayer = map.getSource('example-lines').tileBounds.bounds
+
+
+                        // SHOWPOPUP
+                        console.log(expData)
+
+                        createPopupBlock(expData)
+
+                    }
+
+                    listContainer.appendChild(explosion)
+                }
+
+                function createPopupBlock(feature) {
+
+                    let infoExplosion = `<ul class="explosion_info">`
+
+                    infoExplosion += `<li>${feature.properties.name}</li><li>${feature.properties.date}</li>>`
+
+                    const {
+                        properties: {
+                            info: data
+                        }
+                    } = feature
+
+                    let objData
+
+                    if (typeof data === "string") {
+                        objData = JSON.parse(data)
+                    } else {
+                        objData = data
+                    }
+                    console.log(objData)
+
+
+                    Object.keys(objData).forEach(field => {
+                        infoExplosion += `<li>${objData[field].name}:<span>${objData[field].value},${objData[field].type}</span></li>`
+                    })
+
+                    infoExplosion += `</ul>`
+
+                    popupSensor.remove()
+                    popupBlock.remove()
+
+
+
+                    popupBlock
+                        .setLngLat(turf.center(feature).geometry.coordinates)
+                        .setHTML(infoExplosion)
+                        .addTo(map);
+
+
+                }
+
+                function createPopupSensor(feature) {
+
+                    let infoSensor = `
+                       <ul class="sensor_info">
+                          <li>Сенсор №${feature.properties.id}</li>
+<li><p>Тип сенсора</p> <span>${feature.properties.type}</span></li>
+                          <li><p>Состояние</p><span>${ feature.properties.status == "on" ? "Включен" : "Выключен"}</span></li>
+                          <li><p>Alt</p> <span>${feature.properties.alt}</span></li>
+                          <li><p>Level Stalta</p><span>${feature.properties.level_stalta ? feature.properties.level_stalta : '...'}</span></li>
+                       </ul>`
+
+                    popupSensor.remove()
+                    popupBlock.remove()
+
+                    popupSensor
+                        .setLngLat(feature.geometry.coordinates)
+                        .setHTML(infoSensor)
+                        .addTo(map)
+
+
+                }
+
+                map.on('click', 'example-points-data-circles', (e) => {
+                    createPopupSensor(e.features[0])
+                });
+
+
+                map.on('click', 'example-epicentr-fill', (e) => {
+                    createPopupBlock(e.features[0])
+
+                });
+
+                // Change the cursor to a pointer when
+                // the mouse is over the states layer.
+                map.on('mouseenter', 'example-epicentr-fill', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                map.on('mouseenter', 'example-epicentr-fill', () => {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                // Change the cursor back to a pointer
+                // when it leaves the states layer.
+                map.on('mouseleave', 'example-points-data-circles', () => {
+                    map.getCanvas().style.cursor = '';
+                });
+
+                map.on('mouseleave', 'example-points-data-circles', () => {
+                    map.getCanvas().style.cursor = '';
+                });
+            })
+
+
+
+
+        });
+
+
+
+
+        //        map.on('load', () => {
+        //            map.addSource('mapbox-terrain', {
+        //                type: 'geojson',
+        //                // Use any Mapbox-hosted tileset using its tileset id.
+        //                // Learn more about where to find a tileset id:
+        //                // https://docs.mapbox.com/help/glossary/tileset-id/
+        //                data: './lines.geojson'
+        //            });
+        //
+        //            // create a grid of points with random z-values in their properties
+        //            var extent = [0, 3, 20, 50];
+        //            var cellWidth = 100;
+        //            var pointGrid = turf.pointGrid(extent, cellWidth, {
+        //                units: 'miles'
+        //            });
+        //
+        //            for (var i = 0; i < pointGrid.features.length; i++) {
+        //                pointGrid.features[i].properties.temperature = Math.random() * 10;
+        //            }
+        //            var breaks = [5, 7, 8, 9, 10];
+        //
+        //            var lines = turf.isolines(pointGrid, breaks, {
+        //                zProperty: 'temperature'
+        //            })
+        //
+        //            console.log(lines)
+        //
+        //            let features = []
+        //
+        //            lines.features.forEach(multiLine => {
+        //                let coordinates = []
+        //
+        //                multiLine.geometry.coordinates.forEach(line => {
+        //                    coordinates.push(turf.bezierSpline(turf.lineString(line)).geometry.coordinates);
+        //                    //                    console.log(turf.bezierSpline(turf.lineString(line)))
+        //                    //                    console.log(line)
+        //                    //                    line = turf.bezierSpline(turf.lineString(line))
+        //                })
+        //
+        //                let geometry = {
+        //                    "coordinates": coordinates,
+        //                    "type": "MultiLineString"
+        //                }
+        //
+        //                let element = {
+        //                    "type": "Feature",
+        //                    "properties": {
+        //                        "temperature": multiLine.properties.temperature
+        //                    },
+        //                    "geometry": geometry
+        //                }
+        //
+        //                features.push(element)
+        //            })
+        //
+        //            let curveLines = {
+        //                "type": "FeatureCollection",
+        //                "features": features
+        //            }
+        //
+        //            console.log(curveLines)
+        //
+        //            //            map.addLayer({
+        //            //                    'id': 'terrain-data',
+        //            //                    'type': 'line',
+        //            //                    'source': {
+        //            //                        "type": "geojson",
+        //            //                        "data": featuresOfIsolines
+        //            //                    },
+        //            //                    //                    'source-layer': 'ipkon-ts',
+        //            //                    'layout': {
+        //            //                        'line-join': 'round',
+        //            //                        'line-cap': 'round'
+        //            //                    },
+        //            //                    'paint': {
+        //            //                        'line-color': '#ff69b4',
+        //            //                        'line-width': 5
+        //            //                    }
+        //            //                },
+        //            //                'road-label-simple' // Add layer below labels
+        //            //            );
+        //        });
+
+    </script>
+
+</body>
+
+</html>

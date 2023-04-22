@@ -1,0 +1,608 @@
+{
+    "seismoeventparams": [
+        {
+            "id": 1,
+            "name": "Блок №29",
+            "block_contuor": [
+                [
+                    55.56604457193041,
+                    86.07591567150264
+                ],
+                [
+                    55.56788560825078,
+                    86.07587246057159
+                ],
+                [
+                    55.56788082870335,
+                    86.07523851085467
+                ],
+                [
+                    55.56603979271038,
+                    86.07528175142659
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": 219000,
+            "specific_consumption_explosives": 0.808,
+            "deceleration_interval": "42; 67; 109; 1000",
+            "wells_diameter": "200; 229",
+            "wells_grid": "6.2 5.5 5.0 4.0 3.0",
+            "water_height": 3.0,
+            "explosive_type": "РПГМ-100; Нитронит П марка С-60-0,8",
+            "wells_count": 504,
+            "total_mass_explosives_block": 176915.2,
+            "max_mass_in_well": 461.5,
+            "blasting_method": "ИСКРА-С; ИСКРА-П; ИСКРА-СТАРТ-В; УПР-1А",
+            "rocks_type": "песчаник",
+            "rock_hardness": 10.5,
+            "distance2protected_object": 2519.0,
+            "zaboika": "буровая мелочь",
+            "other_params": {
+                "drills": "09-03-23-152.xml"
+            },
+            "seismoevent": 1
+        },
+        {
+            "id": 2,
+            "name": "Hitachi №36",
+            "block_contuor": [
+                [
+                    55.55987412867021,
+                    86.10379498764338
+                ],
+                [
+                    55.561580469961456,
+                    86.1037561561254
+                ],
+                [
+                    55.561570616650386,
+                    86.10240921851394
+                ],
+                [
+                    55.559864275984644,
+                    86.10244810838888
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": null,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": "14-03-23-36_11_15.xml"
+            },
+            "seismoevent": 2
+        },
+        {
+            "id": 3,
+            "name": "Hitachi №19",
+            "block_contuor": [
+                [
+                    55.55532208885741,
+                    86.09549993868835
+                ],
+                [
+                    55.555860932705464,
+                    86.09548756513837
+                ],
+                [
+                    55.5558463047997,
+                    86.09350706701758
+                ],
+                [
+                    55.55530746124489,
+                    86.09351946765932
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": null,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": "14-03-23-19_15_55.xml"
+            },
+            "seismoevent": 3
+        },
+        {
+            "id": 4,
+            "name": "Экскаватор P&H-2800 №152",
+            "block_contuor": [
+                [
+                    55.56604457193041,
+                    86.07591567150264
+                ],
+                [
+                    55.56788560825078,
+                    86.07587246057159
+                ],
+                [
+                    55.56788082870335,
+                    86.07523851085467
+                ],
+                [
+                    55.56603979271038,
+                    86.07528175142659
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": null,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": "14-03-23-152_16_40.xml"
+            },
+            "seismoevent": 4
+        },
+        {
+            "id": 5,
+            "name": "Экскаватор Hitachi №19-16.00ч",
+            "block_contuor": [
+                [
+                    55.554992550051814,
+                    86.09344748300214
+                ],
+                [
+                    55.55589062264426,
+                    86.09342681363451
+                ],
+                [
+                    55.55587185056367,
+                    86.09089177589996
+                ],
+                [
+                    55.554973778598395,
+                    86.09091250306264
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": null,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": "20-03-23-19 (5)Взрыв 24.03.23г-Hitachi №19-16.00ч.xml"
+            },
+            "seismoevent": 5
+        },
+        {
+            "id": 6,
+            "name": "Взрывные работы 29.03.23 блок экс-ра ЭКГ-18 №21 мерзлота в 15_00",
+            "block_contuor": [
+                [
+                    55.56397110665887,
+                    86.06744496791026
+                ],
+                [
+                    55.56342255990272,
+                    86.06889870248332
+                ],
+                [
+                    55.563350491211644,
+                    86.0693441991257
+                ],
+                [
+                    55.56337484309862,
+                    86.06959404952372
+                ],
+                [
+                    55.56413241949498,
+                    86.0701166357806
+                ],
+                [
+                    55.564566755193006,
+                    86.06994470641938
+                ],
+                [
+                    55.56505328219172,
+                    86.06895682866862
+                ],
+                [
+                    55.56472369657182,
+                    86.06766489822533
+                ],
+                [
+                    55.56422006345084,
+                    86.06746443195476
+                ],
+                [
+                    55.56397110665887,
+                    86.06744496791026
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": 1041,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": "21.txt"
+            },
+            "seismoevent": 6
+        },
+        {
+            "id": 7,
+            "name": "Взрывные работы 28.03.23 блок экс-ра Hitachi №36 15.05ч",
+            "block_contuor": [
+                [
+                    55.55758837956112,
+                    86.10237333963933
+                ],
+                [
+                    55.55753970727696,
+                    86.10251973334853
+                ],
+                [
+                    55.55742859307879,
+                    86.10248876578592
+                ],
+                [
+                    55.55670899226493,
+                    86.10148137387527
+                ],
+                [
+                    55.55631158031526,
+                    86.10032408209558
+                ],
+                [
+                    55.556224193076154,
+                    86.0985584035941
+                ],
+                [
+                    55.55638595808244,
+                    86.0966650374797
+                ],
+                [
+                    55.55683556606576,
+                    86.09545406084206
+                ],
+                [
+                    55.55752848233616,
+                    86.09595877962754
+                ],
+                [
+                    55.55765830044304,
+                    86.09634184935251
+                ],
+                [
+                    55.55768084559977,
+                    86.0972541644438
+                ],
+                [
+                    55.55758837956112,
+                    86.10237333963933
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": null,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": [
+                    "24-03-23-36_28.03.2023г.-Hitachi №36-15.05ч.XML",
+                    "18-03-23-36_28.03.2023г.-Hitachi №36-15.05ч.XML"
+                ]
+            },
+            "seismoevent": 7
+        },
+        {
+            "id": 8,
+            "name": "03.04.23 в 15_05 Hitachi №36 и Hitachi №19",
+            "block_contuor": [
+                [
+                    55.5546980009063,
+                    86.09212159537509
+                ],
+                [
+                    55.55461425724719,
+                    86.09209341775353
+                ],
+                [
+                    55.55459134560034,
+                    86.09385287065912
+                ],
+                [
+                    55.55487889426765,
+                    86.0963024295504
+                ],
+                [
+                    55.555477109593866,
+                    86.09703349149227
+                ],
+                [
+                    55.55566996813424,
+                    86.09480579254323
+                ],
+                [
+                    55.5546980009063,
+                    86.09212159537509
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": 2114,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": [
+                    "03-04-23-19.txt",
+                    "03-04-23-36.txt"
+                ]
+            },
+            "seismoevent": 8
+        },
+        {
+            "id": 9,
+            "name": "Взрыв 05.04.23-ЭКГ-18 №21-15.10",
+            "block_contuor": [
+                [
+                    55.561514414987066,
+                    86.09782746048407
+                ],
+                [
+                    55.561538529655635,
+                    86.09802889076957
+                ],
+                [
+                    55.56156480083583,
+                    86.0982297951421
+                ],
+                [
+                    55.56158977843828,
+                    86.0984310213053
+                ],
+                [
+                    55.561592088270935,
+                    86.09853803606534
+                ],
+                [
+                    55.56157976598614,
+                    86.09865083329089
+                ],
+                [
+                    55.56156477723302,
+                    86.09870205008033
+                ],
+                [
+                    55.56154155178719,
+                    86.09876435320348
+                ],
+                [
+                    55.56152773628274,
+                    86.09880850169245
+                ],
+                [
+                    55.56152773628274,
+                    86.09880850169245
+                ],
+                [
+                    55.561492824399025,
+                    86.09867688310796
+                ],
+                [
+                    55.56147565919662,
+                    86.09857750580093
+                ],
+                [
+                    55.56144971769304,
+                    86.09848012565273
+                ],
+                [
+                    55.56142813299906,
+                    86.09838256847411
+                ],
+                [
+                    55.56138225763509,
+                    86.09818938702753
+                ],
+                [
+                    55.56136527593478,
+                    86.09809301564704
+                ],
+                [
+                    55.561309438935375,
+                    86.09790197252286
+                ],
+                [
+                    55.56129208996917,
+                    86.09780574962241
+                ],
+                [
+                    55.561275896660206,
+                    86.09759869676407
+                ],
+                [
+                    55.561195088566414,
+                    86.09720906513827
+                ],
+                [
+                    55.56117870080586,
+                    86.09711021162991
+                ],
+                [
+                    55.56117133810724,
+                    86.0970033239803
+                ],
+                [
+                    55.56115519774392,
+                    86.09680047968607
+                ],
+                [
+                    55.56115519774392,
+                    86.09680047968607
+                ],
+                [
+                    55.56116981940037,
+                    86.09670678414584
+                ],
+                [
+                    55.56118730905207,
+                    86.09664064950732
+                ],
+                [
+                    55.56120337479072,
+                    86.09658162688763
+                ],
+                [
+                    55.56121052746827,
+                    86.0965119321513
+                ],
+                [
+                    55.56121052746827,
+                    86.0965119321513
+                ],
+                [
+                    55.56123366883927,
+                    86.09645999618641
+                ],
+                [
+                    55.56126174785935,
+                    86.09640075824329
+                ],
+                [
+                    55.56128971109886,
+                    86.09635221512599
+                ],
+                [
+                    55.56132196889772,
+                    86.09626409689443
+                ],
+                [
+                    55.56132196889772,
+                    86.09626409689443
+                ],
+                [
+                    55.56136636453954,
+                    86.09619702272994
+                ],
+                [
+                    55.56136636453954,
+                    86.09619702272994
+                ],
+                [
+                    55.56138474365703,
+                    86.09629702868442
+                ],
+                [
+                    55.561406323347185,
+                    86.0966026649792
+                ],
+                [
+                    55.561399232074336,
+                    86.09681662616546
+                ],
+                [
+                    55.56142519651446,
+                    86.09701833615485
+                ],
+                [
+                    55.561464685592775,
+                    86.09732061283005
+                ],
+                [
+                    55.561514414987066,
+                    86.09782746048407
+                ]
+            ],
+            "type": "Blast",
+            "volume_blasted_rock_mass": null,
+            "specific_consumption_explosives": null,
+            "deceleration_interval": null,
+            "wells_diameter": null,
+            "wells_grid": null,
+            "water_height": null,
+            "explosive_type": null,
+            "wells_count": null,
+            "total_mass_explosives_block": null,
+            "max_mass_in_well": null,
+            "blasting_method": null,
+            "rocks_type": null,
+            "rock_hardness": null,
+            "distance2protected_object": null,
+            "zaboika": null,
+            "other_params": {
+                "drills": "31-03-23-12 (1).xml"
+            },
+            "seismoevent": 9
+        }
+    ]
+}

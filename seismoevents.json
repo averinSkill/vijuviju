@@ -1,0 +1,103 @@
+{
+    "seismoevents": [
+        {
+            "id": 8,
+            "time_scheduled": "2023-04-03T08:05:00",
+            "time_actual": "2023-04-03T08:04:54.820000",
+            "created": "2023-04-05T12:53:48.622348",
+            "magnitude": null,
+            "lon": 55.55507259191219,
+            "lat": 86.09455488618018,
+            "alt": -46.0,
+            "type": "Blast"
+        },
+        {
+            "id": 6,
+            "time_scheduled": "2023-03-29T08:00:00",
+            "time_actual": "2023-03-29T08:00:27.616000",
+            "created": "2023-04-05T12:06:42.597709",
+            "magnitude": null,
+            "lon": 55.564275794029925,
+            "lat": 86.06888803677879,
+            "alt": 212.8,
+            "type": "Blast"
+        },
+        {
+            "id": 4,
+            "time_scheduled": "2023-03-14T09:40:00",
+            "time_actual": "2023-03-14T09:40:01.646000",
+            "created": "2023-04-05T11:28:46.512524",
+            "magnitude": null,
+            "lon": 55.56696270088084,
+            "lat": 86.07557709918957,
+            "alt": 40.0,
+            "type": "Blast"
+        },
+        {
+            "id": 2,
+            "time_scheduled": "2023-03-14T04:15:00",
+            "time_actual": "2023-03-14T04:15:00.076000",
+            "created": "2023-04-05T11:04:35.877553",
+            "magnitude": null,
+            "lon": 55.56072237472853,
+            "lat": 86.10310211808407,
+            "alt": 156.0,
+            "type": "Blast"
+        },
+        {
+            "id": 1,
+            "time_scheduled": "2023-03-09T09:05:00",
+            "time_actual": "2023-03-09T09:05:06.306000",
+            "created": "2023-04-05T10:59:56.700585",
+            "magnitude": null,
+            "lon": 55.56696270088084,
+            "lat": 86.07557709918957,
+            "alt": 45.0,
+            "type": "Blast"
+        },
+        {
+            "id": 3,
+            "time_scheduled": "2023-03-14T08:55:00",
+            "time_actual": null,
+            "created": "2023-04-05T11:26:03.982228",
+            "magnitude": null,
+            "lon": 55.555584200907774,
+            "lat": 86.09450350945096,
+            "alt": -38.0,
+            "type": "Blast"
+        },
+        {
+            "id": 5,
+            "time_scheduled": "2023-03-24T16:00:00",
+            "time_actual": null,
+            "created": "2023-04-05T11:50:42.094771",
+            "magnitude": null,
+            "lon": 55.555432207034826,
+            "lat": 86.09216964367232,
+            "alt": -25.0,
+            "type": "Blast"
+        },
+        {
+            "id": 7,
+            "time_scheduled": "2023-03-28T11:05:00",
+            "time_actual": null,
+            "created": "2023-04-05T12:25:07.118884",
+            "magnitude": null,
+            "lon": 55.557014212631984,
+            "lat": 86.09840864854687,
+            "alt": 6.0,
+            "type": "Blast"
+        },
+        {
+            "id": 9,
+            "time_scheduled": "2023-04-05T11:10:00",
+            "time_actual": null,
+            "created": "2023-04-05T13:00:30.275321",
+            "magnitude": null,
+            "lon": 55.56137739291228,
+            "lat": 86.0975004666273,
+            "alt": 163.0,
+            "type": "Blast"
+        }
+    ]
+}
